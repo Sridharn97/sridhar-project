@@ -7,7 +7,7 @@ class TypingSpeedTest:
     def __init__(self, root):
         self.root = root
         self.root.title("Typing Speed Test")
-        self.root.geometry("600x400")
+        self.root.geometry("600x500")
         
         # Set a colorful background color
         self.root.configure(bg="#282c34")
@@ -24,7 +24,7 @@ class TypingSpeedTest:
             "Once upon a time, in a small village nestled between rolling hills and lush forests, there was a magical garden. This garden was unlike any other, for it only came to life under the gentle glow of the moon.",
             "In this garden lived a variety of enchanting creatures—fairies with shimmering wings, talking animals, and flowers that danced to the melody of the night breeze. But the most remarkable of all was a wise old owl named Oliver."
             "At the bottom, she found herself in a magnificent underground garden, illuminated by glowing crystals embedded in the walls. It was the most beautiful place she had ever seen. Flowers of every color bloomed all around, and the air was filled with the sweet scent of jasmine and honeysuckle."
-                ]
+        ]
 
         # Add title label
         self.title_label = tk.Label(root, text="Typing Speed Test", font=("Helvetica", 20, "bold"), fg="white", bg="#282c34")
@@ -61,8 +61,19 @@ class TypingSpeedTest:
         self.reset_button = tk.Button(self.frame, text="Reset", command=self.reset_test, bg="#ffcc66", font=("Helvetica", 12), width=10)
         self.reset_button.pack(pady=5)
 
+        self.leaderboard_button = tk.Button(self.frame, text="Leaderboard", command=self.show_leaderboard, bg="#00BFFF", font=("Helvetica", 12), width=10)
+        self.leaderboard_button.pack(pady=5)
+
+        self.pause_button = tk.Button(self.frame, text="Pause", command=self.pause_test, bg="#D3D3D3", font=("Helvetica", 12), width=10)
+        self.pause_button.pack(pady=5)
+
+        self.resume_button = tk.Button(self.frame, text="Resume", command=self.resume_test, bg="#32CD32", font=("Helvetica", 12), width=10, state=tk.DISABLED)
+        self.resume_button.pack(pady=5)
+
         self.start_time = None
+        self.pause_time = None
         self.selected_text = ""
+        self.leaderboard = []
 
     def select_text(self):
         difficulty = self.difficulty_var.get()
@@ -80,6 +91,7 @@ class TypingSpeedTest:
         self.start_time = time.time()
         self.start_button.config(state=tk.DISABLED)
         self.finish_button.config(state=tk.NORMAL)
+        self.pause_button.config(state=tk.NORMAL)
 
     def finish_test(self):
         if self.start_time is None:
@@ -88,6 +100,8 @@ class TypingSpeedTest:
             self.calculate_speed()
             self.start_button.config(state=tk.NORMAL)
             self.finish_button.config(state=tk.DISABLED)
+            self.pause_button.config(state=tk.DISABLED)
+            self.resume_button.config(state=tk.DISABLED)
 
     def check_completion(self, event):
         typed_text = self.entry.get()
@@ -110,12 +124,40 @@ class TypingSpeedTest:
                                        f"Typing speed: {words_per_minute:.2f} WPM\n"
                                        f"Accuracy: {accuracy:.2f}%")
 
+        # Add result to leaderboard
+        self.leaderboard.append((words_per_minute, accuracy))
+        self.leaderboard.sort(reverse=True, key=lambda x: x[0])
+
     def reset_test(self):
         self.select_text()
         self.entry.delete(0, tk.END)
         self.start_time = None
         self.start_button.config(state=tk.NORMAL)
         self.finish_button.config(state=tk.DISABLED)
+        self.pause_button.config(state=tk.DISABLED)
+        self.resume_button.config(state=tk.DISABLED)
+
+    def show_leaderboard(self):
+        leaderboard_text = "Leaderboard:\n"
+        for i, (wpm, accuracy) in enumerate(self.leaderboard[:10], 1):
+            leaderboard_text += f"{i}. {wpm:.2f} WPM - {accuracy:.2f}% accuracy\n"
+        messagebox.showinfo("Leaderboard", leaderboard_text)
+
+    def pause_test(self):
+        if self.start_time:
+            self.pause_time = time.time()
+            self.entry.config(state=tk.DISABLED)
+            self.pause_button.config(state=tk.DISABLED)
+            self.resume_button.config(state=tk.NORMAL)
+
+    def resume_test(self):
+        if self.pause_time:
+            pause_duration = time.time() - self.pause_time
+            self.start_time += pause_duration
+            self.entry.config(state=tk.NORMAL)
+            self.entry.focus()
+            self.pause_button.config(state=tk.NORMAL)
+            self.resume_button.config(state=tk.DISABLED)
 
 if __name__ == "__main__":
     root = tk.Tk()
