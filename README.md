@@ -1,3 +1,7 @@
-This project presents a Typing Speed Test application using Python with tkinter for the GUI and pynput for keyboard input monitoring. Users can select a test duration (1, 2, or 3 minutes) and type a displayed paragraph as quickly and accurately as possible. The application calculates and displays performance metrics, including time taken, words per minute (WPM), and typing accuracy, providing an engaging way to assess and improve typing skills.
+The enhanced Python-based typing speed tester application introduces several new features to improve user experience and functionality. The graphical user interface, built with Tkinter, offers a colorful and engaging design with an intuitive layout. Users can select text difficulty levels (easy, medium, hard) and start a typing test, which measures their words per minute (WPM) and accuracy. New features include a leaderboard to track and display high scores, allowing users to see their progress and compete with others. The application also offers pause and resume functionality, enabling users to temporarily stop the test and resume later without losing progress. Sound effects can be added for key presses and completion for an interactive experience. The tester provides real-time feedback, highlights errors, and offers detailed performance metrics. Users can switch between light and dark modes for better visual comfort. The application is lightweight, cross-platform, and customizable, making it a versatile tool for improving typing skills.
 
-The interface consists of a text display area for the paragraph to be typed, an    entry field for user input, and selectable options for the test duration. The user can choose between different durations (1, 2, or 3 minutes), with corresponding paragraphs loaded from pre-specified files. The test begins automatically when the user starts typing and concludes either when the time elapses or when the user completes typing the paragraph.
+
+
+
+
+
